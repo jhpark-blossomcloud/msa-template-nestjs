@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uoslife-template
+  namespace: uoslife-template
+  labels:
+    app: uoslife-template
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: uoslife-template
+  template:
+    metadata:
+      labels:
+        app: uoslife-template
+    spec:
+      containers:
+        - name: uoslife-template
+          image: harbor.uoslife.com/uoslife/uoslife-template:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: APP_URL
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: appUrl
+            - name: APP_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: appPort
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: jwtSecretKey
+            - name: SERVER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: serverToken
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: dbHost
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: dbPort
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: dbDatabase
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: dbUsername
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: dbPassword
+
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: harbor.uoslife.com
