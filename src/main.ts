@@ -6,11 +6,10 @@ import {
 } from '@nestjs/platform-fastify';
 import { SwaggerModule } from '@nestjs/swagger';
 
+import { API_PREFIX } from './constants';
 import { MainModule } from './main.module';
 
 import generateSwaggerDocument from '@infrastructure/swagger/swagger.generator';
-
-const PREFIX = 'template';
 
 (async () => {
   // Initialize app with root module
@@ -20,9 +19,8 @@ const PREFIX = 'template';
   );
 
   // Create swagger document
-  SwaggerModule.setup(`${PREFIX}/docs`, app, generateSwaggerDocument(app), {
+  SwaggerModule.setup(`${API_PREFIX}/docs`, app, generateSwaggerDocument(app), {
     swaggerOptions: { persistAuthorization: true },
-    customSiteTitle: '시대생 API',
   });
 
   // Apply rules for validation
@@ -40,7 +38,7 @@ const PREFIX = 'template';
   app.enableCors({ origin: true, credentials: true });
 
   // Apply global api prefix
-  app.setGlobalPrefix(PREFIX);
+  app.setGlobalPrefix(API_PREFIX);
 
   // Listen to requests
   await app.listen(process.env.APP_PORT || 3000, '0.0.0.0');

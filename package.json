@@ -1,6 +1,6 @@
 {
   "name": "uoslife-nest-boilerplate",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "author": "",
   "private": true,
@@ -33,6 +33,7 @@
     "@nestjs/platform-fastify": "^8.4.7",
     "@nestjs/swagger": "^5.2.1",
     "@nestjs/typeorm": "^8.1.4",
+    "axios": "^0.27.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "fastify-swagger": "^5.2.0",
