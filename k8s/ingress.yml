@@ -5,23 +5,16 @@ metadata:
   namespace: uoslife-template
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    kubernetes.io/ingress.allow-http: "false"
-    nginx.org/client-max-body-size: "0"
+    nginx.org/mergeable-ingress-type: "minion"
 spec:
-  tls:
-    - hosts:
-        - api.uoslife.team
-      secretName: uoslife-tls
   rules:
-    - host: api.uoslife.team
-      http:
-        paths:
-          - backend:
-              service:
-                name: uoslife-template
-                port:
-                  number: 3000
-            path: /template
-            pathType: Prefix
+  - host: api.uoslife.team
+    http:
+      paths:
+      - path: /template
+        pathType: Prefix
+        backend:
+          service:
+            name: uoslife-template
+            port:
+              number: 3000
