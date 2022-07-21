@@ -3,8 +3,7 @@ module.exports = {
     {
       name: 'api',
       script: 'dist/main.js',
-      instances: 2,
-      exec_mode: 'cluster',
+      exec_mode: 'fork',
     },
   ],
 };

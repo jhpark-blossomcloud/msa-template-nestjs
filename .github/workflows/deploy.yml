@@ -21,7 +21,7 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           VERSION_CODE: ${{ steps.version.outputs.code }}
         with:
-          args: '📦 [API] `{{ VERSION_CODE }}` 빌드를 시작합니다.'
+          args: '[Template API] `{{ VERSION_CODE }}` 빌드를 시작합니다.'
 
       - name: Cache Docker layers
         uses: actions/cache@v2
@@ -57,8 +57,9 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           VERSION_CODE: ${{ steps.version.outputs.code }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         with:
-          args: '🛫 [API] `{{ VERSION_CODE }}` 배포를 시작합니다.'
+          args: '[Template API] `{{ VERSION_CODE }}` 배포를 시작합니다. ({{ COMMIT_MESSAGE }})'
 
       - name: Deploy to cluster
         uses: actions-hub/kubectl@master
@@ -80,4 +81,4 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           VERSION_CODE: ${{ steps.version.outputs.code }}
         with:
-          args: '🍻 [API] `{{ VERSION_CODE }}` 배포가 완료되었습니다.'
+          args: '[Template API] `{{ VERSION_CODE }}` 배포가 완료되었습니다. 🍻'

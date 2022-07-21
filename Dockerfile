@@ -10,4 +10,4 @@ RUN yarn global add pm2 && yarn build
 CMD ["pm2-runtime", "start", "pm2.config.js", "--env", "production"]
 
 FROM base as development
-CMD ["yarn start:dev"]
+CMD ["yarn", "start:dev"]

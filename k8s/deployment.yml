@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: uoslife-template
-  namespace: uoslife-template
+  namespace: uoslife
   labels:
     app: uoslife-template
 spec:
@@ -75,7 +75,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: uoslife-template
-  namespace: uoslife-template
+  namespace: uoslife
 spec:
   ports:
   - port: 3000

@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: uoslife-template-ingress
-  namespace: uoslife-template
+  namespace: uoslife
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.org/mergeable-ingress-type: "minion"
