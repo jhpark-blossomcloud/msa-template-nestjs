@@ -23,34 +23,27 @@ jobs:
         with:
           args: '[Template API] `{{ VERSION_CODE }}` 빌드를 시작합니다.'
 
-      - name: Cache Docker layers
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-      - name: Login to Docker Registry
-        uses: docker/login-action@v1
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Harbor Registry
+        uses: docker/login-action@v2
         with:
           registry: harbor.uoslife.com
           username: ${{ secrets.HARBOR_USERNAME }}
           password: ${{ secrets.HARBOR_ACCESS_TOKEN }}
 
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Build Docker Image
-        run: |
-          docker buildx build \
-            --cache-from "type=local,src=/tmp/.buildx-cache" \
-            --cache-to "type=local,dest=/tmp/.buildx-cache" \
-            --platform linux/amd64 \
-            --tag harbor.uoslife.com/uoslife/uoslife-template:latest \
-            --tag harbor.uoslife.com/uoslife/uoslife-template:${{ steps.version.outputs.code }} \
-            --target production \
-            --build-arg APP_PORT=3000 \
-            --push .
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          target: production
+          push: true
+          platforms:
+            linux/amd64
+          tags: harbor.uoslife.com/uoslife/uoslife-template:latest, harbor.uoslife.com/uoslife/uoslife-template:${{ steps.version.outputs.code }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Send Log to Discord
         uses: Ilshidur/action-discord@master
@@ -66,14 +59,14 @@ jobs:
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
         with:
-          args: set image -n uoslife-template --record deployment/uoslife-template uoslife-template=harbor.uoslife.com/uoslife/uoslife-template:${{ steps.version.outputs.code }}
+          args: set image deployment uoslife-template uoslife-template=harbor.uoslife.com/uoslife/uoslife-template:${{ steps.version.outputs.code }}
 
       - name: Verify Deployment
         uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
         with:
-          args: rollout status -n uoslife-template deployment/uoslife-template
+          args: rollout status deployment uoslife-template
 
       - name: Send Success Log to Discord
         uses: Ilshidur/action-discord@master

@@ -1,13 +1,13 @@
-FROM node:16 as base
-WORKDIR /app
-COPY . .
+FROM node:16-alpine as base
+
 ARG APP_PORT
 EXPOSE ${APP_PORT}
-RUN yarn && yarn global add @nestjs/cli
+
+WORKDIR /app
+COPY . .
+RUN yarn
 
 FROM base as production
-RUN yarn global add pm2 && yarn build
-CMD ["pm2-runtime", "start", "pm2.config.js", "--env", "production"]
 
-FROM base as development
-CMD ["yarn", "start:dev"]
+RUN yarn build && npm prune --omit=dev --force && rm package-lock.json
+CMD ["node", "dist/main"]
