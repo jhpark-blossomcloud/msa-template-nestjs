@@ -7,10 +7,18 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
-import { JwtPayloadData } from '@app/auth/commands/jwt.data';
 import { User } from '@app/user/commands/user.data';
 import { UserNotFoundException } from '@app/user/user.errors';
 import { UserService } from '@app/user/user.service';
+
+export type JwtPayloadData = {
+  exp: number;
+  iat: number;
+  nbf: number;
+  iss: string;
+  user_id: string;
+  is_admin: boolean;
+};
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

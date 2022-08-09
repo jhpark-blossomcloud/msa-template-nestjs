@@ -21,51 +21,62 @@ spec:
           ports:
             - containerPort: 3000
           env:
-            - name: APP_URL
+            # 공통 설정
+            - name: WISE_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: secret
-                  key: appUrl
-            - name: APP_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: secret
-                  key: appPort
+                  name: uoslife-common-secret
+                  key: WISE_API_KEY
             - name: JWT_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: secret
-                  key: jwtSecretKey
+                  name: uoslife-common-secret
+                  key: JWT_SECRET_KEY
             - name: SERVER_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: secret
-                  key: serverToken
+                  name: uoslife-common-secret
+                  key: SERVER_TOKEN
+            - name: POD_CIDR
+              valueFrom:
+                secretKeyRef:
+                  name: uoslife-common-secret
+                  key: POD_CIDR
+
+            # 서비스별 설정 (Opaque)
+            - name: APP_ENV
+              value: production
+            - name: APP_URL
+              value: https://api.uoslife.team/template
+            - name: APP_PORT
+              value: 3000
+
+            # 서비스별 설정 (Secret)
             - name: DB_HOST
               valueFrom:
                 secretKeyRef:
-                  name: secret
-                  key: dbHost
+                  name: uoslife-template-secret
+                  key: DB_HOST
             - name: DB_PORT
               valueFrom:
                 secretKeyRef:
-                  name: secret
-                  key: dbPort
+                  name: uoslife-template-secret
+                  key: DB_PORT
             - name: DB_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: secret
-                  key: dbDatabase
+                  name: uoslife-template-secret
+                  key: DB_DATABASE
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: secret
-                  key: dbUsername
+                  name: uoslife-template-secret
+                  key: DB_USERNAME
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: secret
-                  key: dbPassword
+                  name: uoslife-template-secret
+                  key: DB_PASSWORD
 
           imagePullPolicy: Always
       imagePullSecrets:
